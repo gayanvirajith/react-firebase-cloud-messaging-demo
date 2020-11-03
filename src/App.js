@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import './app.css'
+
+export default function App({ messaging }) {
+
+    const [cloudMessage, setCloudMessage] = useState({})
+
+    messaging.onMessage((payload) => {
+        console.log('Message received. ' + JSON.stringify(payload))
+        setCloudMessage({ ...cloudMessage, payload })
+    })
+
+    return (
+        <div>
+            Firebase cloud messaging
+            <pre>
+                {Object.keys(cloudMessage).length > 0 && JSON.stringify(cloudMessage)}
+            </pre>
+            {Object.keys(cloudMessage).length === 0 && (<p>{'Waiting for a message...'}</p>)}
+        </div>
+    )
 }
 
-export default App;
